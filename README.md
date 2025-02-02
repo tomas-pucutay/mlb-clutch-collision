@@ -29,7 +29,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
     --role="roles/storage.objectAdmin"
 ```
 
-Habilitar APIs
+Enable APIs
 
 ```bash
 # Secret manager
@@ -70,7 +70,12 @@ gcloud iam service-accounts keys create key.json \
 export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/key.json"
 ```
 
-Crear la estructura de carpetas
+Create bucket
+```bash
+gsutil mb -l us-central1 gs://$(echo $PROJECT_ID)/
+```
+
+Create file structure
 
 mlb-clutch-collision
  |--frontend
@@ -81,6 +86,7 @@ mlb-clutch-collision
      |--functions
      |--utils
      |--config.py
+
 
 Ingestion
 
