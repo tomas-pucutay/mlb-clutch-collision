@@ -49,9 +49,10 @@ gcloud services enable dataflow.googleapis.com
 
 Create secret in Secret Manager and manager auth
 ```bash
-BUCKET=$(echo $PROJECT_ID)
+BUCKET=$(gcloud config get-value project)
 echo -n $BUCKET | gcloud secrets create BUCKET \      
     --replication-policy="automatic"
+echo -n $BUCKET | gcloud secrets versions add BUCKET --data-file=-
 gcloud secrets add-iam-policy-binding BUCKET \
     --member="serviceAccount:$SA_DEV_EMAIL" \
     --role="roles/secretmanager.secretAccessor"
