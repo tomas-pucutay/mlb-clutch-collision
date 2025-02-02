@@ -11,6 +11,7 @@ Auth y base config (fill "your-project-name"):
 gcloud auth login
 gcloud projects [your-project-name] --set-as-default
 PROJECT_ID=$(gcloud config get-value project)
+echo "{\"PROJECT_ID\": \"$(gcloud config get-value project)\"}" > config.json 
 ```
 
 Create service account and add IAM roles
@@ -61,3 +62,15 @@ Create a key file for Service Account
 gcloud iam service-accounts keys create key.json \
     --iam-account=$SA_DEV_EMAIL
 export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/key.json"
+
+Crear la estructura de carpetas
+
+mlb-clutch-collision
+ |--frontend
+ |--services
+     |--automl
+     |--bigquery
+     |--dataflow
+     |--functions
+     |--utils
+     |--config.py
