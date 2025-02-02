@@ -1,0 +1,6 @@
+beautifulsoup4==4.13.0
+functions-framework==3.8.2
+google-cloud-secret-manager==2.22.1
+google-cloud-storage==3.0.0
+pandas==2.2.3
+requests==2.32.3

@@ -45,6 +45,10 @@ gcloud services enable aiplatform.googleapis.com
 gcloud services enable notebooks.googleapis.com
 gcloud services enable compute.googleapis.com
 gcloud services enable dataflow.googleapis.com
+# Cloud functions
+gcloud services enable cloudfunctions.googleapis.com
+gcloud services enable run.googleapis.com
+gcloud services enable cloudbuild.googleapis.com
 ```
 
 Create secret in Secret Manager and manager auth
@@ -60,9 +64,11 @@ gcloud secrets add-iam-policy-binding BUCKET \
 
 Create a key file for Service Account
 
+```bash
 gcloud iam service-accounts keys create key.json \
     --iam-account=$SA_DEV_EMAIL
 export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/key.json"
+```
 
 Crear la estructura de carpetas
 
@@ -75,3 +81,22 @@ mlb-clutch-collision
      |--functions
      |--utils
      |--config.py
+
+Ingestion
+
+Get Top players
+
+Execute Functions
+- Copy file from config.json to services/functions/config.json
+- Copy file from services/utils/secrets.py to services/functions/secrets.py
+- Modify services/utils/secrets.py to reference the current directory
+- Add authorization to google cloud functions service account
+```bash
+gcloud secrets add-iam-policy-binding BUCKET \
+  --member="serviceAccount:$PROJECT_ID@appspot.gserviceaccount.com" \
+  --role="roles/secretmanager.admin"
+```
+- Deploy with the command in services/functions/command.sh
+
+Create a dataset for prediction
+

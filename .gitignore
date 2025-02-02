@@ -173,3 +173,4 @@ cython_debug/
 # Own
 key.json
 config.json
+services/functions/config.json
