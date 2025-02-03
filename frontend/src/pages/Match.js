@@ -17,12 +17,12 @@ const Header = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60px; /* Ajuste del alto del header */
-  padding: 0 20px; /* Padding izquierdo y derecho */
+  height: 60px;
+  padding: 0 20px;
 `;
 
 const HeaderLogo = styled.img`
-  height: 40px; /* Ajustamos la altura del logo */
+  height: 40px;
   width: auto;
 `;
 
@@ -75,6 +75,22 @@ const VsTextButton = styled.button`
   
   &:hover {
     background-color: #08535d;
+  }
+`;
+
+const SpeechButton = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    background-color: #218838;
   }
 `;
 
@@ -214,6 +230,28 @@ const Match = () => {
   const [pitcherSeason, setPitcherSeason] = useState('');
   const [isMatchStarted, setIsMatchStarted] = useState(false);
   const [expandedPlays, setExpandedPlays] = useState([]);
+  const [audioUrl, setAudioUrl] = useState(null);
+
+  const textToRead = "Hello, this is only a test for only fans.";
+
+  const synthesizeSpeech = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/synthesize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: textToRead }),
+      });
+
+      const data = await response.json();
+      if (data.audio) {
+        setAudioUrl(data.audio);
+      } else {
+        console.error("Error en la síntesis de voz:", data);
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  };
 
   const handleBatterCategoryChange = (e) => {
     setBatterCategory(e.target.value);
@@ -316,61 +354,61 @@ const Match = () => {
                 </>
               )}
             </PlayerSelectionWrapper>
-      </div>
+        </div>
+  
+          {/* Separator VS */}
+        <div>
+          <VsTextButton onClick={handleStartMatch}>
+            VS
+          </VsTextButton>
+        </div>
 
-        {/* Separator VS */}
-      <div>
-        <VsTextButton onClick={handleStartMatch}>
-          VS
-        </VsTextButton>
-      </div>
-
-      {/* Pitcher */}
-      <div>
-      <CategoryLabel>Pitcher</CategoryLabel>
-        <PlayerSelectionWrapper>
-          <PlayerSelection onChange={handlePitcherCategoryChange} value={pitcherCategory}>
-            <option value="Best 2024">Best 2024</option>
-            <option value="Best all time">Best all time</option>
-          </PlayerSelection>
-
-          <PlayerSelection
-            onChange={handlePitcherPlayerChange}
-            value={selectedPitcher}
-            disabled={!pitcherCategory}
-          >
-            <option value="">Pitcher</option>
-            {Object.keys(playersDictPitcher[pitcherCategory]).map((player) => (
-              <option key={player} value={player}>
-                {player}
-              </option>
-            ))}
-          </PlayerSelection>
-
-          {selectedPitcher && (
-            <>
-              <PlayerSelection
-                onChange={handlePitcherSeasonChange}
-                value={pitcherSeason}
-                disabled={!selectedPitcher}
-              >
-                <option value="">Season</option>
-                {playersDictPitcher[pitcherCategory][selectedPitcher].seasons.map((season) => (
-                  <option key={season} value={season}>
-                    {season}
-                  </option>
-                ))}
-              </PlayerSelection>
-              <PlayerImageContainer>
-              <PlayerImage
-                src={`https://img.mlbstatic.com/mlb-photos/image/upload/w_213,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/${playersDictPitcher[pitcherCategory][selectedPitcher].id}/headshot/67/current`}
-                alt="Lanzador"
-              />
-            </PlayerImageContainer>
-            </>
-          )}
-        </PlayerSelectionWrapper>
-      </div>
+        {/* Pitcher */}
+        <div>
+        <CategoryLabel>Pitcher</CategoryLabel>
+          <PlayerSelectionWrapper>
+            <PlayerSelection onChange={handlePitcherCategoryChange} value={pitcherCategory}>
+              <option value="Best 2024">Best 2024</option>
+              <option value="Best all time">Best all time</option>
+            </PlayerSelection>
+  
+            <PlayerSelection
+              onChange={handlePitcherPlayerChange}
+              value={selectedPitcher}
+              disabled={!pitcherCategory}
+            >
+              <option value="">Pitcher</option>
+              {Object.keys(playersDictPitcher[pitcherCategory]).map((player) => (
+                <option key={player} value={player}>
+                  {player}
+                </option>
+              ))}
+            </PlayerSelection>
+  
+            {selectedPitcher && (
+              <>
+                <PlayerSelection
+                  onChange={handlePitcherSeasonChange}
+                  value={pitcherSeason}
+                  disabled={!selectedPitcher}
+                >
+                  <option value="">Season</option>
+                  {playersDictPitcher[pitcherCategory][selectedPitcher].seasons.map((season) => (
+                    <option key={season} value={season}>
+                      {season}
+                    </option>
+                  ))}
+                </PlayerSelection>
+                <PlayerImageContainer>
+                <PlayerImage
+                  src={`https://img.mlbstatic.com/mlb-photos/image/upload/w_213,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/${playersDictPitcher[pitcherCategory][selectedPitcher].id}/headshot/67/current`}
+                  alt="Lanzador"
+                />
+              </PlayerImageContainer>
+              </>
+            )}
+          </PlayerSelectionWrapper>
+        </div>
       </UpperSection>
 
       <LowerSection>
@@ -392,6 +430,9 @@ const Match = () => {
               ))}
           </>
         )}
+        <p>{textToRead}</p>
+        <SpeechButton onClick={synthesizeSpeech}>Reproducir Texto</SpeechButton>
+        {audioUrl && <audio controls src={audioUrl} autoPlay />}
       </LowerSection>
     </MatchContainer>
   );

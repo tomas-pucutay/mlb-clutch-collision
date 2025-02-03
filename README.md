@@ -60,6 +60,8 @@ gcloud services enable dataflow.googleapis.com
 gcloud services enable cloudfunctions.googleapis.com
 gcloud services enable run.googleapis.com
 gcloud services enable cloudbuild.googleapis.com
+# Text to speech
+gcloud services enable texttospeech.googleapis.com
 ```
 
 Create secret in Secret Manager and manager auth
