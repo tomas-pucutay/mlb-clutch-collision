@@ -175,3 +175,4 @@ key.json
 config.json
 services/functions/config.json
 services/dataflow/config.json
+services/automl/config.json

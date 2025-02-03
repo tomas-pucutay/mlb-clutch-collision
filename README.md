@@ -131,3 +131,15 @@ gcloud secrets add-iam-policy-binding BUCKET \
   --role="roles/editor"
 ```
 - Execute each of the commands in commands.sh
+
+Transfer data to BigQuery
+
+- Create a BD and table in BigQuery
+- Load CSV into BigQuery.
+```bash
+gcloud alpha bq datasets create [DATASET_ID] --project=$PROJECT_ID
+bq load --source_format=CSV --autodetect --skip_leading_rows=1 $PROJECT_ID:[DATASET_ID].[TABLE_ID] [gs-URI]
+```
+- Follow the model of the command in services/bigquery/command.sh
+
+Training

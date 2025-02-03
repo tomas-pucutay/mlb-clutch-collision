@@ -1,0 +1,2 @@
+# For a DATABASE MLB, table merged_data, this is the command to load CSV into BigQuery
+bq load --source_format=CSV --autodetect --skip_leading_rows=1 mlb-clutch-collision:MLB.merged_data gs://mlb-clutch-collision/processed_data/all_plays_merged_data.csv
