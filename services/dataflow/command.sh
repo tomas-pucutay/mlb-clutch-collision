@@ -24,3 +24,12 @@ python get_all_stats.py \
   --temp_location=gs://mlb-clutch-collision/temp/ \
   --staging_location=gs://mlb-clutch-collision/staging/ \
   --worker_machine_type=n1-standard-1
+
+# For merge_data.py
+python merge_data.py \                                    
+  --project=mlb-clutch-collision \
+  --runner=DataflowRunner \
+  --region=us-central1 \
+  --temp_location=gs://mlb-clutch-collision/temp/ \
+  --staging_location=gs://mlb-clutch-collision/staging/ \
+  --worker_machine_type=n1-standard-1
