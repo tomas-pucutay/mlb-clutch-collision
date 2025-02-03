@@ -27,6 +27,17 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 gcloud projects add-iam-policy-binding $PROJECT_ID \
     --member="serviceAccount:$SA_DEV_EMAIL" \
     --role="roles/storage.objectAdmin"
+# For Dataflow
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:$SA_DEV_EMAIL" \
+    --role="roles/storage.admin"
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:$SA_DEV_EMAIL" \
+    --role="roles/dataflow.admin"
+# General
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:$SA_DEV_EMAIL" \
+    --role="roles/editor"
 ```
 
 Enable APIs
@@ -84,8 +95,7 @@ mlb-clutch-collision
      |--bigquery
      |--dataflow
      |--functions
-     |--utils
-     |--config.py
+ |--config.json
 
 
 Ingestion
@@ -106,3 +116,18 @@ gcloud secrets add-iam-policy-binding BUCKET \
 
 Create a dataset for prediction
 
+Execute pipelines
+- Copy file from config.json to services/functions/config.json
+- Add authorization to dataflow topics
+```bash
+gcloud secrets add-iam-policy-binding BUCKET \
+  --member="serviceAccount:$PROJECT_ID@appspot.gserviceaccount.com" \
+  --role="roles/storage.admin"
+gcloud secrets add-iam-policy-binding BUCKET \
+  --member="serviceAccount:$PROJECT_ID@appspot.gserviceaccount.com" \
+  --role="roles/dataflow.admin"
+gcloud secrets add-iam-policy-binding BUCKET \
+  --member="serviceAccount:$PROJECT_ID@appspot.gserviceaccount.com" \
+  --role="roles/editor"
+```
+- Execute each of the commands in commands.sh
