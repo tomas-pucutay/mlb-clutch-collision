@@ -1,1 +1,0 @@
-google_cloud_aiplatform==1.79.0
