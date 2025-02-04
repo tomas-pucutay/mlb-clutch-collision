@@ -340,13 +340,36 @@ const Match = () => {
       const filteredData = data.filter(item => item.details?.call);
       console.log(`Found ${filteredData.length} events 'details.call'`);
   
-      const mappedData = filteredData.map(item => {
-        return {
-          play: item.details.code,
-          result: item.details.description,
-        };
-      });
+      const mappedData = await Promise.all(
+        filteredData.map(async (item) => {
+          const playText = `${item.details.code} - ${item.details.description}`;
+          
+          try {
+            const storyResponse = await axios.post("http://localhost:5000/generate_story", {
+              event: item.details,
+              batter_name: "Babe Ruth",
+              batter_season: "1920",
+              pitcher_name: "Chris Sales",
+              pitcher_season: "2024",
+              user_choice: "technical"
+            });
 
+            console.log(storyResponse.data)
+  
+            return {
+              play: playText,
+              result: storyResponse.data.story || "No story available"
+            };
+          } catch (error) {
+            console.error("Error fetching story:", error);
+            return {
+              play: playText,
+              result: "Error generating story"
+            };
+          }
+        })
+      );
+      
       console.log(mappedData);
       setPlays(mappedData);
       setIsMatchStarted(true);

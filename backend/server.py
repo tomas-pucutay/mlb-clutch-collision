@@ -73,13 +73,26 @@ def get_play_events():
 @app.route("/generate_story", methods=["POST"])
 def generate_story():
     data = request.json
-    text = data.get("text", "")
 
-    if not text:
+    event = data.get("event", ""),
+    batter_name = data.get("batter_name", ""),
+    batter_season = data.get("batter_season", ""),
+    pitcher_name = data.get("pitcher_name", ""),
+    pitcher_season = data.get("pitcher_season", ""),
+    user_choice = data.get("user_choice", "")
+
+    if not event:
         return jsonify({"error": "Text is required"}), 400
 
     try:
-        story = create_story(text)
+        story = create_story(
+            event=event,
+            batter_name=batter_name,
+            batter_season=batter_season,
+            pitcher_name=pitcher_name,
+            pitcher_season=pitcher_season,
+            user_choice=user_choice
+            )
         return jsonify({"story": story})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
