@@ -1,8 +1,16 @@
 # mlb-clutch-collision
 
+This repo is for Google MLB hackaton
+Challenge: Wildcard - Enhance fan experience.
+
+Proyecto: MLB Clutch Collision.
+Ever wondered who’d win if two MLB teams that never faced off clashed? With cutting-edge data, we simulate thrilling matchups to spark engagement, excitement, and fan interaction. Play the what-ifs!
+
+Project architecture
+
+
 Requirements
 - Install CLI Google Cloud [Follow the steps](https://cloud.google.com/sdk/docs/install?hl=es-419#deb)
-
 
 First steps with google cloud
 
@@ -168,3 +176,5 @@ Copy service account credentials and add to GOOGLE_APPLICATION_CREDENTIALS
 
 e.g. 34.71.143.77
 
+Frontend (Google Cloud Run)
+gcloud run deploy mlb-frontend
