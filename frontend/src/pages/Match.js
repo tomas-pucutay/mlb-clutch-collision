@@ -109,7 +109,6 @@ const VsTextButton = styled(motion.button)`
 `;
 
 const SpeechButton = styled.button`
-  margin-top: 20px;
   padding: 10px 20px;
   font-size: 1rem;
   background-color: #28a745;
@@ -176,7 +175,7 @@ const PlayerSelection = styled.select`
   cursor: pointer;
   text-align: left;
   font-size: 1rem;
-  border-radius: 10px;
+  border-radius: 5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -248,6 +247,7 @@ const Match = () => {
   const [audioUrl, setAudioUrl] = useState(null);
   const [plays, setPlays] = useState([]);
   const [vsMessage, setVsMessage] = useState('');
+  const [language, setLanguage] = useState('english');
 
   const synthesizeSpeech = async (text) => {
     try {
@@ -261,6 +261,10 @@ const Match = () => {
     } catch (error) {
       console.error("Error en la solicitud:", error);
     }
+  };
+
+  const handleLanguageChange = (e) => {
+    setLanguage(e.target.value);
   };
 
   const handleBatterCategoryChange = (e) => {
@@ -548,7 +552,18 @@ const Match = () => {
           <h3>Waiting match...</h3>
         ) : (
           <>
-            <h3>Game Details</h3>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", gap: "10px" }}>
+              <h3>Game Details</h3>
+              {/* Selector de idioma */}
+              <PlayerSelectionWrapper style={{ width: "200px" }}>
+                <PlayerSelection onChange={handleLanguageChange} value={language}>
+                  <option value="english">English</option>
+                  <option value="spanish">Spanish</option>
+                  <option value="japanese">Japanese</option>
+                  <option value="korean">Korean</option>
+                </PlayerSelection>
+              </PlayerSelectionWrapper>
+            </div>
               {plays.map((play, index) => (
                 <AccordionWrapper key={index}>
                   <AccordionButton onClick={() => toggleAccordion(index)}>
