@@ -12,7 +12,7 @@ def create_story(event, batter_name, batter_season, pitcher_name, pitcher_season
     - A historical analogy.
     - A technical fact (speed, comparison to modern standards).
     - Narrative emotion.
-    - Less than 100 words"""
+    - Less than 50 words"""
 
     prompt = ChatPromptTemplate.from_messages(
         [

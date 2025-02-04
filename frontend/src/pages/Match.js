@@ -249,11 +249,9 @@ const Match = () => {
   const [plays, setPlays] = useState([]);
   const [vsMessage, setVsMessage] = useState('');
 
-  const textToRead = "Hello, this is only a test for only fans.";
-
-  const synthesizeSpeech = async () => {
+  const synthesizeSpeech = async (text) => {
     try {
-      const response = await axios.post("http://localhost:5000/synthesize", { text: textToRead });
+      const response = await axios.post("http://localhost:5000/synthesize", { text: text });
       if (response.data.audio) {
         setAudioUrl(response.data.audio);
         new Audio(response.data.audio).play();
@@ -556,7 +554,15 @@ const Match = () => {
                 <AccordionWrapper key={index}>
                   <AccordionButton onClick={() => toggleAccordion(index)}>
                     {play.play}
-                    {expandedPlays.includes(index) ? <FaMinus /> : <FaPlus />}
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <SpeechButton
+                        onClick={() => synthesizeSpeech(play.result)}
+                        style={{ padding: "5px 10px", fontSize: "0.8rem" }}
+                      >
+                        ▶ Play
+                      </SpeechButton>
+                      {expandedPlays.includes(index) ? <FaMinus /> : <FaPlus />}
+                    </div>
                   </AccordionButton>
                   <AccordionContent isOpen={expandedPlays.includes(index)}>
                     <p>{play.result}</p>
@@ -565,9 +571,6 @@ const Match = () => {
               ))}
           </>
         )}
-        <p>{textToRead}</p>
-        <SpeechButton onClick={synthesizeSpeech}>Reproducir Texto</SpeechButton>
-        {audioUrl && <audio src={audioUrl} autoPlay onEnded={() => console.log("Audio finished")} />}
       </LowerSection>
     </MatchContainer>
   );
