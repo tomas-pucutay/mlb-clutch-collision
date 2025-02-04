@@ -36,6 +36,10 @@ const HeaderLogo = styled.img`
   width: auto;
 `;
 
+const TrophyIcon = styled.span`
+  font-size: 25px;
+`;
+
 const UpperSection = styled.div`
   height: 50%;
   display: flex;
@@ -268,6 +272,7 @@ const Match = () => {
   const [plays, setPlays] = useState([]);
   const [vsMessage, setVsMessage] = useState('');
   const [language, setLanguage] = useState('english');
+  const [winner, setWinner] = useState(null);
 
   const synthesizeSpeech = async (text) => {
     try {
@@ -420,10 +425,21 @@ const Match = () => {
             </span>
           </>
         );
+        
+        // Decision on who won the play
+        if ( eventResponse.data.event_type === "single" ||
+             eventResponse.data.event_type === "double" ||
+             eventResponse.data.event_type === "triple" ||
+             eventResponse.data.event_type === "home_run" ||
+             eventResponse.data.event_type === "walk" ||
+             eventResponse.data.event_type === "hit_by_pitch" ) {
+          setWinner("batter");
+        } else {
+          setWinner("pitcher");
+        }
       } else {
         setVsMessage("Event data could not be retrieved.");
       }
-      
 
     } catch (error) {
       console.error("API request error:", error);
@@ -509,6 +525,7 @@ const Match = () => {
                   </PlayerSelection>
 
                   <PlayerImageContainer>
+                  {winner === "batter" && <TrophyIcon>🏆</TrophyIcon>}
                   <PlayerImage
                     src={`https://img.mlbstatic.com/mlb-photos/image/upload/w_213,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/${playersDictBatter[batterCategory][selectedBatter].id}/headshot/67/current`}
                     alt="Bateador"
@@ -566,6 +583,7 @@ const Match = () => {
                   src={`https://img.mlbstatic.com/mlb-photos/image/upload/w_213,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/${playersDictPitcher[pitcherCategory][selectedPitcher].id}/headshot/67/current`}
                   alt="Lanzador"
                 />
+                {winner === "pitcher" && <TrophyIcon>🏆</TrophyIcon>}
               </PlayerImageContainer>
               </>
             )}
