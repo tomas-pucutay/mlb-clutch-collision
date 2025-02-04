@@ -1,6 +1,6 @@
 # MLB Clutch Collision
 
-![Main photo](https://raw.githubusercontent.com/tomas-pucutay/mlb-clutch-collision/refs/heads/main/frontend/src/assets/MLB_Clutch_Collision.jpg?token=GHSAT0AAAAAAC6BL5MITPMV3PH54YR4EY52Z5CMUTA)
+![Main photo](https://raw.githubusercontent.com/tomas-pucutay/mlb-clutch-collision/refs/heads/main/frontend/src/assets/MLB_Clutch_Collision.jpg)
 
 This repo is for Google MLB hackaton Challenge: Wildcard - Enhance fan experience.
 
@@ -8,7 +8,7 @@ This repo is for Google MLB hackaton Challenge: Wildcard - Enhance fan experienc
 Ever wondered who’d win if two MLB teams that never faced off clashed? With cutting-edge data, we simulate thrilling matchups to spark engagement, excitement, and fan interaction. Play the what-ifs!
 
 **Project architecture**
-![architecture](https://raw.githubusercontent.com/tomas-pucutay/mlb-clutch-collision/refs/heads/main/media/Architecture.png?token=GHSAT0AAAAAAC6BL5MIWEHAESWS5PJFVEG4Z5CMUGA)
+![architecture](https://raw.githubusercontent.com/tomas-pucutay/mlb-clutch-collision/refs/heads/main/media/Architecture.png)
 
 ### Quick overview.
 The app lets you pit players who may have never faced off on the field against each other, creating a narrative with baseball commentator-style audio, and it supports multiple languages. For those hungry for curiosity and seeking ultra-personalized experiences.
@@ -23,7 +23,7 @@ If you don't want to read too much you can start with this quick steps to reprod
 
 ### Download repo
 ```bash
-git clone [repo-url]
+git clone https://github.com/tomas-pucutay/mlb-clutch-collision.git
 ```
 ### To deploy server:
 
@@ -145,7 +145,7 @@ gsutil mb -l us-central1 gs://$(echo $PROJECT_ID)/
 
 Download repo and explore file structure
 ```bash
-git clone [repo-url]
+git clone https://github.com/tomas-pucutay/mlb-clutch-collision.git
 ```
 1. backend: Connection to Google resources
 2. frontend: Webapp for user
