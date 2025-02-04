@@ -555,7 +555,10 @@ const Match = () => {
                     {play.play}
                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                       <SpeechButton
-                        onClick={() => synthesizeSpeech(play.result)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          synthesizeSpeech(play.result);
+                        }}
                         style={{ padding: "5px 10px", fontSize: "0.8rem" }}
                       >
                         ▶ Play
