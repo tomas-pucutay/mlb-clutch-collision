@@ -1,12 +1,14 @@
 # MLB Clutch Collision
 
+![Main photo](https://raw.githubusercontent.com/tomas-pucutay/mlb-clutch-collision/refs/heads/main/frontend/src/assets/MLB_Clutch_Collision.jpg?token=GHSAT0AAAAAAC6BL5MITPMV3PH54YR4EY52Z5CMUTA)
+
 This repo is for Google MLB hackaton Challenge: Wildcard - Enhance fan experience.
 
 ### Summary
 Ever wondered who’d win if two MLB teams that never faced off clashed? With cutting-edge data, we simulate thrilling matchups to spark engagement, excitement, and fan interaction. Play the what-ifs!
 
 **Project architecture**
-![architecture](https://raw.githubusercontent.com/tomas-pucutay/mlb-clutch-collision/refs/heads/main/media/Architecture.png?token=GHSAT0AAAAAAC6BL5MJLOAXLH64NH2QNHLIZ5CLK7A)
+![architecture](https://raw.githubusercontent.com/tomas-pucutay/mlb-clutch-collision/refs/heads/main/media/Architecture.png?token=GHSAT0AAAAAAC6BL5MIWEHAESWS5PJFVEG4Z5CMUGA)
 
 ### Quick overview.
 The app lets you pit players who may have never faced off on the field against each other, creating a narrative with baseball commentator-style audio, and it supports multiple languages. For those hungry for curiosity and seeking ultra-personalized experiences.
