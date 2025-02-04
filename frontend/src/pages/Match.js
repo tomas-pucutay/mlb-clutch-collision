@@ -271,7 +271,7 @@ const Match = () => {
 
   const synthesizeSpeech = async (text) => {
     try {
-      const response = await axios.post("http://34.71.143.77:5000/synthesize", { text: text });
+      const response = await axios.post("http://34.71.143.77:5000/synthesize", { text: text, lang: language });
       if (response.data.audio) {
         setAudioUrl(response.data.audio);
         new Audio(response.data.audio).play();
@@ -377,7 +377,8 @@ const Match = () => {
               batter_season: batterSeason,
               pitcher_name: selectedPitcher,
               pitcher_season: pitcherSeason,
-              user_choice: "technical"
+              user_choice: "technical",
+              language: language
             });
             console.log(storyResponse.data)
   

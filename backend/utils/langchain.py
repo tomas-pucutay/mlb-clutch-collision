@@ -3,11 +3,11 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableSequence
 from langchain_core.output_parsers import StrOutputParser
 
-def create_story(event, batter_name, batter_season, pitcher_name, pitcher_season, user_choice):
+def create_story(event, batter_name, batter_season, pitcher_name, pitcher_season, user_choice, language="english"):
 
     system = """
     You are Vin Scully calling a game between batter {batter_name} ({batter_season}) and pitcher {pitcher_name} ({pitcher_season}).
-    Event: {event}. Use the style selected by the user.
+    Event: {event}. Use the style selected by the user and the output must be in the language the user wants.
     Include:
     - A historical analogy.
     - A technical fact (speed, comparison to modern standards).
@@ -17,7 +17,7 @@ def create_story(event, batter_name, batter_season, pitcher_name, pitcher_season
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", system),
-            ("human", "Style: {user_choice}")
+            ("human", "Response style: {user_choice}. Response language: {language}")
         ]
     )
 
@@ -33,7 +33,8 @@ def create_story(event, batter_name, batter_season, pitcher_name, pitcher_season
         'batter_season': batter_season,
         'pitcher_name': pitcher_name,
         'pitcher_season': pitcher_season,
-        'user_choice': user_choice
+        'user_choice': user_choice,
+        'language': language
         })
 
     return response

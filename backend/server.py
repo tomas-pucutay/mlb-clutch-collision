@@ -14,12 +14,13 @@ CORS(app)
 def synthesize():
     data = request.json
     text = data.get("text", "")
+    lang = data.get("lang", "english")
     
     if not text:
         return jsonify({"error": "Texto not found"}), 400
 
     try:
-        audio_content = synthesize_speech(text)
+        audio_content = synthesize_speech(text, lang)
         return jsonify({"audio": f"data:audio/mp3;base64,{audio_content}"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -74,12 +75,13 @@ def get_play_events():
 def generate_story():
     data = request.json
 
-    event = data.get("event", ""),
-    batter_name = data.get("batter_name", ""),
-    batter_season = data.get("batter_season", ""),
-    pitcher_name = data.get("pitcher_name", ""),
-    pitcher_season = data.get("pitcher_season", ""),
+    event = data.get("event", "")
+    batter_name = data.get("batter_name", "")
+    batter_season = data.get("batter_season", "")
+    pitcher_name = data.get("pitcher_name", "")
+    pitcher_season = data.get("pitcher_season", "")
     user_choice = data.get("user_choice", "")
+    language = data.get("language", "english")
 
     if not event:
         return jsonify({"error": "Text is required"}), 400
@@ -91,7 +93,8 @@ def generate_story():
             batter_season=batter_season,
             pitcher_name=pitcher_name,
             pitcher_season=pitcher_season,
-            user_choice=user_choice
+            user_choice=user_choice,
+            language=language
             )
         return jsonify({"story": story})
     except Exception as e:
