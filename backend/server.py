@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from utils.audio import synthesize_speech
+from utils.langchain import create_story
 import pandas as pd
 
 CSV_PATH = "backend/data/batch_prediction.csv"
@@ -68,6 +69,20 @@ def get_play_events():
 
     play_events = filtered_df.iloc[0]["play_events"]
     return jsonify({"play_events": play_events})
+
+@app.route("/generate_story", methods=["POST"])
+def generate_story():
+    data = request.json
+    text = data.get("text", "")
+
+    if not text:
+        return jsonify({"error": "Text is required"}), 400
+
+    try:
+        story = create_story(text)
+        return jsonify({"story": story})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

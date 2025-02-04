@@ -24,8 +24,15 @@ const Header = styled.div`
   padding: 0 20px;
 `;
 
+const HeaderText = styled.h1`
+  color: white;
+  font-size: 1.0rem;
+  font-weight: bold;
+`;
+
 const HeaderLogo = styled.img`
   height: 40px;
+  margin-right: 15px;
   width: auto;
 `;
 
@@ -51,7 +58,6 @@ const LowerSection = styled.div`
     color: black;
   }
 `;
-
 
 const PlayerImageContainer = styled.div`
   margin-top: 20px;
@@ -405,9 +411,10 @@ const Match = () => {
       {/* Header */}
       <Header>
         <HeaderLogo src="https://www.mlbstatic.com/team-logos/league-on-dark/1.svg" alt="MLB Logo" />
+        <HeaderText>MLB Clutch Collision</HeaderText>
       </Header>
       <UpperSection>
-        {/* Bateador */}
+        {/* Batter */}
         <div>
           <CategoryLabel>Batter</CategoryLabel>
             <PlayerSelectionWrapper>
