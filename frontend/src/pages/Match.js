@@ -347,10 +347,10 @@ const Match = () => {
           try {
             const storyResponse = await axios.post("http://localhost:5000/generate_story", {
               event: item.details,
-              batter_name: "Babe Ruth",
-              batter_season: "1920",
-              pitcher_name: "Chris Sales",
-              pitcher_season: "2024",
+              batter_name: selectedBatter,
+              batter_season: batterSeason,
+              pitcher_name: selectedPitcher,
+              pitcher_season: pitcherSeason,
               user_choice: "technical"
             });
 
