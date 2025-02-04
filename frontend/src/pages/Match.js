@@ -482,165 +482,165 @@ const Match = () => {
    return (
     <MatchContainer>
       {/* Header */}
-      <Header>
-        <HeaderLogo src="https://www.mlbstatic.com/team-logos/league-on-dark/1.svg" alt="MLB Logo" />
-        <HeaderText>MLB Clutch Collision</HeaderText>
-      </Header>
-      <UpperSection>
-        {/* Batter */}
-        <div>
-          <CategoryLabel>Choose Batter</CategoryLabel>
+        <Header>
+          <HeaderLogo src="https://www.mlbstatic.com/team-logos/league-on-dark/1.svg" alt="MLB Logo" />
+          <HeaderText>MLB Clutch Collision</HeaderText>
+        </Header>
+        <UpperSection>
+          {/* Batter */}
+          <div>
+            <CategoryLabel>Choose Batter</CategoryLabel>
+              <PlayerSelectionWrapper>
+                <PlayerSelection onChange={handleBatterCategoryChange} value={batterCategory}>
+                  <option value="Best 2024">Best 2024</option>
+                  <option value="Best all time">Best all time</option>
+                </PlayerSelection>
+                
+                <PlayerSelection
+                  onChange={handleBatterPlayerChange}
+                  value={selectedBatter}
+                  disabled={!batterCategory}
+                >
+                  <option value="">Batter</option>
+                  {Object.keys(playersDictBatter[batterCategory]).map((player) => (
+                    <option key={player} value={player}>
+                      {player}
+                    </option>
+                  ))}
+                </PlayerSelection>
+
+                {selectedBatter && (
+                  <>
+                    <PlayerSelection
+                      onChange={handleBatterSeasonChange}
+                      value={batterSeason}
+                      disabled={!selectedBatter}
+                    >
+                      <option value="">Season</option>
+                      {playersDictBatter[batterCategory][selectedBatter].seasons.map((season) => (
+                        <option key={season} value={season}>
+                          {season}
+                        </option>
+                      ))}
+                    </PlayerSelection>
+
+                    <PlayerImageContainer>
+                    {winner === "batter" && <TrophyIcon>🏆</TrophyIcon>}
+                    <PlayerImage
+                      src={`https://img.mlbstatic.com/mlb-photos/image/upload/w_213,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/${playersDictBatter[batterCategory][selectedBatter].id}/headshot/67/current`}
+                      alt="Bateador"
+                    />
+                    </PlayerImageContainer>
+                  </>
+                )}
+              </PlayerSelectionWrapper>
+          </div>
+
+          {/* Separator VS */}
+          <VsTextButtonContainer>
+            <VsButton />
+          </VsTextButtonContainer>
+          
+                  
+          {/* Pitcher */}
+          <div>
+          <CategoryLabel>Choose Pitcher</CategoryLabel>
             <PlayerSelectionWrapper>
-              <PlayerSelection onChange={handleBatterCategoryChange} value={batterCategory}>
+              <PlayerSelection onChange={handlePitcherCategoryChange} value={pitcherCategory}>
                 <option value="Best 2024">Best 2024</option>
                 <option value="Best all time">Best all time</option>
               </PlayerSelection>
-    
+
               <PlayerSelection
-                onChange={handleBatterPlayerChange}
-                value={selectedBatter}
-                disabled={!batterCategory}
+                onChange={handlePitcherPlayerChange}
+                value={selectedPitcher}
+                disabled={!pitcherCategory}
               >
-                <option value="">Batter</option>
-                {Object.keys(playersDictBatter[batterCategory]).map((player) => (
+                <option value="">Pitcher</option>
+                {Object.keys(playersDictPitcher[pitcherCategory]).map((player) => (
                   <option key={player} value={player}>
                     {player}
                   </option>
                 ))}
               </PlayerSelection>
-    
-              {selectedBatter && (
+
+              {selectedPitcher && (
                 <>
                   <PlayerSelection
-                    onChange={handleBatterSeasonChange}
-                    value={batterSeason}
-                    disabled={!selectedBatter}
+                    onChange={handlePitcherSeasonChange}
+                    value={pitcherSeason}
+                    disabled={!selectedPitcher}
                   >
                     <option value="">Season</option>
-                    {playersDictBatter[batterCategory][selectedBatter].seasons.map((season) => (
+                    {playersDictPitcher[pitcherCategory][selectedPitcher].seasons.map((season) => (
                       <option key={season} value={season}>
                         {season}
                       </option>
                     ))}
                   </PlayerSelection>
-
                   <PlayerImageContainer>
-                  {winner === "batter" && <TrophyIcon>🏆</TrophyIcon>}
                   <PlayerImage
-                    src={`https://img.mlbstatic.com/mlb-photos/image/upload/w_213,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/${playersDictBatter[batterCategory][selectedBatter].id}/headshot/67/current`}
-                    alt="Bateador"
+                    src={`https://img.mlbstatic.com/mlb-photos/image/upload/w_213,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/${playersDictPitcher[pitcherCategory][selectedPitcher].id}/headshot/67/current`}
+                    alt="Lanzador"
                   />
-                  </PlayerImageContainer>
+                  {winner === "pitcher" && <TrophyIcon>🏆</TrophyIcon>}
+                </PlayerImageContainer>
                 </>
               )}
             </PlayerSelectionWrapper>
-        </div>
-  
-        {/* Separator VS */}
-        <VsTextButtonContainer>
-          <VsButton />
-        </VsTextButtonContainer>
+          </div>
+        </UpperSection>
         
-                
-        {/* Pitcher */}
-        <div>
-        <CategoryLabel>Choose Pitcher</CategoryLabel>
-          <PlayerSelectionWrapper>
-            <PlayerSelection onChange={handlePitcherCategoryChange} value={pitcherCategory}>
-              <option value="Best 2024">Best 2024</option>
-              <option value="Best all time">Best all time</option>
-            </PlayerSelection>
-  
-            <PlayerSelection
-              onChange={handlePitcherPlayerChange}
-              value={selectedPitcher}
-              disabled={!pitcherCategory}
-            >
-              <option value="">Pitcher</option>
-              {Object.keys(playersDictPitcher[pitcherCategory]).map((player) => (
-                <option key={player} value={player}>
-                  {player}
-                </option>
-              ))}
-            </PlayerSelection>
-  
-            {selectedPitcher && (
-              <>
-                <PlayerSelection
-                  onChange={handlePitcherSeasonChange}
-                  value={pitcherSeason}
-                  disabled={!selectedPitcher}
-                >
-                  <option value="">Season</option>
-                  {playersDictPitcher[pitcherCategory][selectedPitcher].seasons.map((season) => (
-                    <option key={season} value={season}>
-                      {season}
-                    </option>
-                  ))}
-                </PlayerSelection>
-                <PlayerImageContainer>
-                <PlayerImage
-                  src={`https://img.mlbstatic.com/mlb-photos/image/upload/w_213,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/${playersDictPitcher[pitcherCategory][selectedPitcher].id}/headshot/67/current`}
-                  alt="Lanzador"
-                />
-                {winner === "pitcher" && <TrophyIcon>🏆</TrophyIcon>}
-              </PlayerImageContainer>
-              </>
-            )}
-          </PlayerSelectionWrapper>
-        </div>
-      </UpperSection>
-      
-      {/* Dynamic text */}
-      {vsMessage && (
-        <VsMessageContainer>
-          <h3>{vsMessage}</h3>
-        </VsMessageContainer>
-      )}
-
-      <LowerSection>
-        {!isMatchStarted ? (
-          <h3>Waiting match...</h3>
-        ) : (
-          <>
-            <LanguageContainer>
-              <h3>Game Events</h3>
-              {/* Language selector */}
-              <PlayerSelectionWrapper style={{ width: "200px" }}>
-                <PlayerSelection onChange={handleLanguageChange} value={language}>
-                  <option value="english">English</option>
-                  <option value="spanish">Spanish</option>
-                  <option value="japanese">Japanese</option>
-                  <option value="korean">Korean</option>
-                </PlayerSelection>
-              </PlayerSelectionWrapper>
-              <OkButton onClick={handleLanguageSelection}>OK</OkButton>
-            </LanguageContainer>
-              {plays.map((play, index) => (
-                <AccordionWrapper key={index}>
-                  <AccordionButton onClick={() => toggleAccordion(index)}>
-                    {play.play}
-                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                      <SpeechButton
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          synthesizeSpeech(play.result);
-                        }}
-                        style={{ padding: "5px 10px", fontSize: "0.8rem" }}
-                      >
-                        ▶ Play
-                      </SpeechButton>
-                      {expandedPlays.includes(index) ? <FaMinus /> : <FaPlus />}
-                    </div>
-                  </AccordionButton>
-                  <AccordionContent isOpen={expandedPlays.includes(index)}>
-                    <p>{play.result}</p>
-                  </AccordionContent>
-                </AccordionWrapper>
-              ))}
-          </>
+        {/* Dynamic text */}
+        {vsMessage && (
+          <VsMessageContainer>
+            <h3>{vsMessage}</h3>
+          </VsMessageContainer>
         )}
-      </LowerSection>
+        
+        <LowerSection>
+          {!isMatchStarted ? (
+            <h3>Waiting match...</h3>
+          ) : (
+            <>
+              <LanguageContainer>
+                <h3>Game Events</h3>
+                {/* Language selector */}
+                <PlayerSelectionWrapper style={{ width: "200px" }}>
+                  <PlayerSelection onChange={handleLanguageChange} value={language}>
+                    <option value="english">English</option>
+                    <option value="spanish">Spanish</option>
+                    <option value="japanese">Japanese</option>
+                    <option value="korean">Korean</option>
+                  </PlayerSelection>
+                </PlayerSelectionWrapper>
+                <OkButton onClick={handleLanguageSelection}>OK</OkButton>
+              </LanguageContainer>
+                {plays.map((play, index) => (
+                  <AccordionWrapper key={index}>
+                    <AccordionButton onClick={() => toggleAccordion(index)}>
+                      {play.play}
+                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        <SpeechButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            synthesizeSpeech(play.result);
+                          }}
+                          style={{ padding: "5px 10px", fontSize: "0.8rem" }}
+                        >
+                          ▶ Play
+                        </SpeechButton>
+                        {expandedPlays.includes(index) ? <FaMinus /> : <FaPlus />}
+                      </div>
+                    </AccordionButton>
+                    <AccordionContent isOpen={expandedPlays.includes(index)}>
+                      <p>{play.result}</p>
+                    </AccordionContent>
+                  </AccordionWrapper>
+                ))}
+            </>
+          )}
+        </LowerSection>
     </MatchContainer>
   );
 };
