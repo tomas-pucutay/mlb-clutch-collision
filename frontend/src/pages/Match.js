@@ -1,7 +1,9 @@
+import axios from 'axios';
 import { motion } from "framer-motion";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import React, { useState } from 'react';
 import styled from 'styled-components';
+
 import { playersDictBatter, playersDictPitcher } from '../data/playersData';
 
 const MatchContainer = styled.div`
@@ -46,36 +48,57 @@ const LowerSection = styled.div`
   align-items: center;
 
   h3 {
-    color: black; /* Asegura que el texto sea negro */
+    color: black;
   }
 `;
 
 
 const PlayerImageContainer = styled.div`
   margin-top: 20px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 `;
 
 const PlayerImage = styled.img`
   height: 120px;
-  width: 120px;
   border-radius: 8px;
-  margin-left: 20px;
+  margin-left: 0; 
 `;
 
-const VsTextButton = styled.button`
-  padding: 15px 30px;
-  font-size: 2rem;
-  background-color: #0f4b5b;
-  color: white;
+const VsTextButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 150px;
+  position: relative;
+`;
+
+const VsTextButton = styled(motion.button)`
+  width: 100px;
+  height: 100px;
+  background-image: url(${require('../assets/baseball.png')});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-size: 40px;
   border: none;
-  border-radius: 8px;
+  border-radius: 50%;
   cursor: pointer;
   font-weight: bold;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
   
   &:hover {
     background-color: #08535d;
+  }
+
+  /* Media query para pantallas pequeñas */
+  @media (max-width: 768px) {
+    font-size: 35px;
+    width: 70px;
+    height: 70px;
   }
 `;
 
@@ -111,13 +134,14 @@ const PlayerSelectionWrapper = styled.div`
 `;
 
 const PlayerSelection = styled.select`
-  padding: 10px 15px;
-  font-size: 1rem;
+  min-width: 200px;
+  padding: 5px 15px;
+  font-size: 0.8rem;
   color: black;
-  background-color: #f2f2f2;
+  background-color:rgb(255, 255, 255);  
   border: none;
   border-bottom: 2px solid #bbb;
-  margin-top: 10px;
+  margin-top: 5px;
   transition: border-color 0.3s ease;
   
   &:focus {
@@ -126,7 +150,14 @@ const PlayerSelection = styled.select`
   }
   
   option {
-    background-color: #f2f2f2;
+    background-color:rgb(213, 217, 255);
+  }
+
+  /* Media query para pantallas medianas */
+  @media (max-width: 768px) {
+    padding: 2px 10px;
+    min-width: 150px;
+    font-size: 0.7rem;
   }
 `;
 
@@ -155,6 +186,29 @@ const AccordionWrapper = styled.div`
   width: 100%;
   max-width: 500px;
   margin-top: 10px;
+`;
+
+const VsMessageContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #333;
+  z-index: 10;
+  max-width: 200px;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  
+ 
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+    max-width:25%;
+  }
 `;
 
 
@@ -186,24 +240,19 @@ const Match = () => {
   const [isMatchStarted, setIsMatchStarted] = useState(false);
   const [expandedPlays, setExpandedPlays] = useState([]);
   const [audioUrl, setAudioUrl] = useState(null);
+  const [plays, setPlays] = useState([]);
+  const [vsMessage, setVsMessage] = useState('');
 
   const textToRead = "Hello, this is only a test for only fans.";
 
   const synthesizeSpeech = async () => {
     try {
-      const response = await fetch("http://localhost:5000/synthesize", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: textToRead }),
-      });
-  
-      const data = await response.json();
-      if (data.audio) {
-        setAudioUrl(data.audio);
-        const audio = new Audio(data.audio);
-        audio.play();
+      const response = await axios.post("http://localhost:5000/synthesize", { text: textToRead });
+      if (response.data.audio) {
+        setAudioUrl(response.data.audio);
+        new Audio(response.data.audio).play();
       } else {
-        console.error("Error en la síntesis de voz:", data);
+        console.error("Error en la síntesis de voz:", response.data);
       }
     } catch (error) {
       console.error("Error en la solicitud:", error);
@@ -240,8 +289,109 @@ const Match = () => {
     setPitcherSeason(e.target.value);
   };
 
-  const handleStartMatch = () => {
-    setIsMatchStarted(true);
+  const handleStartMatch = async () => {
+    if (!batterSeason || !selectedBatter || !pitcherSeason || !selectedPitcher) {
+      setVsMessage("Select batter & pitcher, and the season");
+      return;
+    }
+
+    const batterId = playersDictBatter[batterCategory][selectedBatter]?.id;
+    const pitcherId = playersDictPitcher[pitcherCategory][selectedPitcher]?.id;
+
+    if (!batterId || !pitcherId) {
+      console.error("Player ID not found.");
+      return;
+    }
+
+    // PLAY EVENTS API
+
+    try {
+      const response = await axios.get("http://localhost:5000/get_play_events", {
+        params: {
+          batter_season: batterSeason,
+          batter_id: batterId,
+          pitcher_season: pitcherSeason,
+          pitcher_id: pitcherId
+        }
+      });
+
+      let dataString = response.data.play_events;
+      dataString = dataString.replace(/'/g, '"');
+      dataString = dataString.replace(/\bFalse\b/g, 'false').replace(/\bTrue\b/g, 'true');
+
+      let data = [];
+      try {
+        data = JSON.parse(dataString);
+      } catch (e) {
+        console.error("Error parsing API response:", e);
+      }
+
+      if (!Array.isArray(data)) {
+        console.error("API response is not an array.");
+        return;
+      }
+
+      const filteredData = data.filter(item => item.details?.call);
+      console.log(`Found ${filteredData.length} events 'details.call'`);
+  
+      const mappedData = filteredData.map(item => {
+        return {
+          play: item.details.code,
+          result: item.details.description,
+        };
+      });
+
+      console.log(mappedData);
+      setPlays(mappedData);
+      setIsMatchStarted(true);
+
+      // EVENT API
+
+      const eventResponse = await axios.get("http://localhost:5000/get_event", {
+        params: {
+          batter_season: batterSeason,
+          batter_id: batterId,
+          pitcher_season: pitcherSeason,
+          pitcher_id: pitcherId
+        }
+      });
+
+      if (eventResponse.data && eventResponse.data) {
+        setVsMessage(`Match result: ${eventResponse.data.event_type}`);
+      } else {
+        setVsMessage("Event data could not be retrieved.");
+      }
+
+    } catch (error) {
+      console.error("API request error:", error);
+      setVsMessage("Error occurred while fetching the data.");
+    }
+  };
+
+  const VsButton = () => {
+    const buttonAnimation = {
+      rest: {
+        scale: 1,
+        rotate: 0,
+        transition: { duration: 0.2 },
+      },
+      pressed: {
+        scale: 1.2,
+        rotate: 10,
+        transition: { type: "spring", stiffness: 400, damping: 10 },
+      },
+    };
+  
+    return (
+      <VsTextButton
+        variants={buttonAnimation}
+        initial="rest"
+        whileTap="pressed"
+        onClick={handleStartMatch}
+      >
+        VS
+      </VsTextButton>
+    );
   };
 
   const toggleAccordion = (index) => {
@@ -250,15 +400,7 @@ const Match = () => {
     );
   };
 
-  // Datos simulados para el acordeón
-  const plays = [
-    { play: 'Swinging Strike', result: 'Strikeout' },
-    { play: 'Ball', result: 'Walk' },
-    { play: 'Foul', result: 'Foul Ball' },
-    { play: 'Grounder', result: 'Ground Out' },
-  ];
-
-  return (
+   return (
     <MatchContainer>
       {/* Header */}
       <Header>
@@ -313,13 +455,12 @@ const Match = () => {
             </PlayerSelectionWrapper>
         </div>
   
-          {/* Separator VS */}
-        <div>
-          <VsTextButton onClick={handleStartMatch}>
-            VS
-          </VsTextButton>
-        </div>
-
+        {/* Separator VS */}
+        <VsTextButtonContainer>
+          <VsButton />
+        </VsTextButtonContainer>
+        
+                
         {/* Pitcher */}
         <div>
         <CategoryLabel>Pitcher</CategoryLabel>
@@ -367,6 +508,13 @@ const Match = () => {
           </PlayerSelectionWrapper>
         </div>
       </UpperSection>
+      
+      {/* Dynamic text */}
+      {vsMessage && (
+        <VsMessageContainer>
+          <h3>{vsMessage}</h3>
+        </VsMessageContainer>
+      )}
 
       <LowerSection>
         {!isMatchStarted ? (
