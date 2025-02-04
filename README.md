@@ -145,3 +145,26 @@ bq load --source_format=CSV --autodetect --skip_leading_rows=1 $PROJECT_ID:[DATA
 - Follow the model of the command in services/bigquery/command.sh
 
 Training
+
+
+
+Virtual Machine (Backend)
+
+Create a virtual machine in Google Cloud
+Zone: us-central1-c. Machine Type
+
+Configure Static IP
+Enter to (nic0) from External IP > IP addreses > Promote to static in external. Copy IP
+
+Configure Firewall
+Side panel Cloud NGFW > Firewall politics
+Create a new rule (Inbound) with origin 0.0.0.0/0, protocol TCP: 80,443
+
+Inside SSH
+Install python3.11-venv python-is-python3
+Clone repository [backend]
+Create virtual environment and install dependencies
+Copy service account credentials and add to GOOGLE_APPLICATION_CREDENTIALS
+
+e.g. 34.71.143.77
+

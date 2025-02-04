@@ -8,7 +8,7 @@ def synthesize_speech(text):
 
     voice = tts.VoiceSelectionParams(
         language_code="en-US",
-        name="es-US-Wavenet-D",
+        name="en-US-Wavenet-D",
         ssml_gender=tts.SsmlVoiceGender.MALE,
     )
 

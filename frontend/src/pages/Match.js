@@ -241,10 +241,12 @@ const Match = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: textToRead }),
       });
-
+  
       const data = await response.json();
       if (data.audio) {
         setAudioUrl(data.audio);
+        const audio = new Audio(data.audio);
+        audio.play();
       } else {
         console.error("Error en la síntesis de voz:", data);
       }
@@ -432,7 +434,7 @@ const Match = () => {
         )}
         <p>{textToRead}</p>
         <SpeechButton onClick={synthesizeSpeech}>Reproducir Texto</SpeechButton>
-        {audioUrl && <audio controls src={audioUrl} autoPlay />}
+        {audioUrl && <audio src={audioUrl} autoPlay onEnded={() => console.log("Audio finished")} />}
       </LowerSection>
     </MatchContainer>
   );
