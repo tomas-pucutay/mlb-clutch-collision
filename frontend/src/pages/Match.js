@@ -182,7 +182,7 @@ const PlayerSelection = styled.select`
   @media (max-width: 768px) {
     padding: 2px 10px;
     min-width: 150px;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
   }
 `;
 
@@ -412,10 +412,18 @@ const Match = () => {
       });
 
       if (eventResponse.data && eventResponse.data) {
-        setVsMessage(`Match result: ${eventResponse.data.event_type}`);
+        setVsMessage(
+          <>
+            Match result:{" "}
+            <span style={{ fontSize: "20px", color: "red", fontWeight: "bold" }}>
+              {eventResponse.data.event_type}
+            </span>
+          </>
+        );
       } else {
         setVsMessage("Event data could not be retrieved.");
       }
+      
 
     } catch (error) {
       console.error("API request error:", error);
