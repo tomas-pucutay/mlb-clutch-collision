@@ -59,6 +59,27 @@ const LowerSection = styled.div`
   }
 `;
 
+const LanguageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const OkButton = styled.button`
+  padding: 6px;
+  font-size: 0.8rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
 const PlayerImageContainer = styled.div`
   margin-top: 20px;
   display: flex;
@@ -143,10 +164,9 @@ const PlayerSelection = styled.select`
   padding: 5px 15px;
   font-size: 0.8rem;
   color: black;
-  background-color:rgb(255, 255, 255);  
+  background-color:rgb(254, 255, 242);  
   border: none;
   border-bottom: 2px solid #bbb;
-  margin-top: 5px;
   transition: border-color 0.3s ease;
   
   &:focus {
@@ -265,6 +285,10 @@ const Match = () => {
 
   const handleLanguageChange = (e) => {
     setLanguage(e.target.value);
+  };
+
+  const handleLanguageSelection = () => {
+    handleStartMatch();
   };
 
   const handleBatterCategoryChange = (e) => {
@@ -440,7 +464,7 @@ const Match = () => {
       <UpperSection>
         {/* Batter */}
         <div>
-          <CategoryLabel>Batter</CategoryLabel>
+          <CategoryLabel>Choose Batter</CategoryLabel>
             <PlayerSelectionWrapper>
               <PlayerSelection onChange={handleBatterCategoryChange} value={batterCategory}>
                 <option value="Best 2024">Best 2024</option>
@@ -494,7 +518,7 @@ const Match = () => {
                 
         {/* Pitcher */}
         <div>
-        <CategoryLabel>Pitcher</CategoryLabel>
+        <CategoryLabel>Choose Pitcher</CategoryLabel>
           <PlayerSelectionWrapper>
             <PlayerSelection onChange={handlePitcherCategoryChange} value={pitcherCategory}>
               <option value="Best 2024">Best 2024</option>
@@ -552,9 +576,9 @@ const Match = () => {
           <h3>Waiting match...</h3>
         ) : (
           <>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", gap: "10px" }}>
-              <h3>Game Details</h3>
-              {/* Selector de idioma */}
+            <LanguageContainer>
+              <h3>Game Events</h3>
+              {/* Language selector */}
               <PlayerSelectionWrapper style={{ width: "200px" }}>
                 <PlayerSelection onChange={handleLanguageChange} value={language}>
                   <option value="english">English</option>
@@ -563,7 +587,8 @@ const Match = () => {
                   <option value="korean">Korean</option>
                 </PlayerSelection>
               </PlayerSelectionWrapper>
-            </div>
+              <OkButton onClick={handleLanguageSelection}>OK</OkButton>
+            </LanguageContainer>
               {plays.map((play, index) => (
                 <AccordionWrapper key={index}>
                   <AccordionButton onClick={() => toggleAccordion(index)}>
