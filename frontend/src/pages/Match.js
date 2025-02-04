@@ -251,7 +251,7 @@ const Match = () => {
 
   const synthesizeSpeech = async (text) => {
     try {
-      const response = await axios.post("http://localhost:5000/synthesize", { text: text });
+      const response = await axios.post("http://34.71.143.77:5000/synthesize", { text: text });
       if (response.data.audio) {
         setAudioUrl(response.data.audio);
         new Audio(response.data.audio).play();
@@ -310,7 +310,7 @@ const Match = () => {
     // PLAY EVENTS API
 
     try {
-      const response = await axios.get("http://localhost:5000/get_play_events", {
+      const response = await axios.get("http://34.71.143.77:5000/get_play_events", {
         params: {
           batter_season: batterSeason,
           batter_id: batterId,
@@ -343,7 +343,7 @@ const Match = () => {
           const playText = `${item.details.code} - ${item.details.description}`;
           
           try {
-            const storyResponse = await axios.post("http://localhost:5000/generate_story", {
+            const storyResponse = await axios.post("http://34.71.143.77:5000/generate_story", {
               event: item.details,
               batter_name: selectedBatter,
               batter_season: batterSeason,
@@ -351,7 +351,6 @@ const Match = () => {
               pitcher_season: pitcherSeason,
               user_choice: "technical"
             });
-
             console.log(storyResponse.data)
   
             return {
@@ -374,7 +373,7 @@ const Match = () => {
 
       // EVENT API
 
-      const eventResponse = await axios.get("http://localhost:5000/get_event", {
+      const eventResponse = await axios.get("http://34.71.143.77:5000/get_event", {
         params: {
           batter_season: batterSeason,
           batter_id: batterId,
