@@ -1,20 +1,66 @@
-# mlb-clutch-collision
+# MLB Clutch Collision
 
-This repo is for Google MLB hackaton
-Challenge: Wildcard - Enhance fan experience.
+This repo is for Google MLB hackaton Challenge: Wildcard - Enhance fan experience.
 
-Proyecto: MLB Clutch Collision.
+### Summary
 Ever wondered who’d win if two MLB teams that never faced off clashed? With cutting-edge data, we simulate thrilling matchups to spark engagement, excitement, and fan interaction. Play the what-ifs!
 
-Project architecture
+**Project architecture**
+![architecture](https://raw.githubusercontent.com/tomas-pucutay/mlb-clutch-collision/refs/heads/main/media/Architecture.png?token=GHSAT0AAAAAAC6BL5MJLOAXLH64NH2QNHLIZ5CLK7A)
+
+### Quick overview.
+The app lets you pit players who may have never faced off on the field against each other, creating a narrative with baseball commentator-style audio, and it supports multiple languages. For those hungry for curiosity and seeking ultra-personalized experiences.
+To achieve this there are some steps to follow.
+- Model to predict: The side of arquitecture for ingestion
+- Google resources: The resources such as Google TTS and Gemini.
+- Client-server architecture: To let the user interact.
 
 
-Requirements
+# Quick steps to reproduce
+If you don't want to read too much you can start with this quick steps to reproduce
+
+### Download repo
+```bash
+git clone [repo-url]
+```
+### To deploy server:
+
+Steps in Google Cloud:
+- Be sure to have a Google Cloud account
+- Create a service account, get the key.json
+- Enable APIs: texttospeech and aiplatform
+
+Steps in terminal (from root folder):
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate # .venv/Scripts/activate for Windows
+pip install -r requirements.txt
+cd ../
+cp [path-to-your-key.json] ./[key].json
+export GOOGLE_APPLICATION_CREDENTIALS="[key].json"
+python backend/server.py
+```
+
+### To deploy client:
+Steps in terminal (from root folder):
+```bash
+cd frontend
+npm install
+npm start
+```
+*If it doesn't work, check frontend/src/pages/Match.js and change the URLs XXX.XXX.XXX.XXX:5000 to localhost:5000
+
+# Complete step-by-step
+
+### Requirements
 - Install CLI Google Cloud [Follow the steps](https://cloud.google.com/sdk/docs/install?hl=es-419#deb)
+- Python 3.10 or better
+- NodeJS 18 or better
 
-First steps with google cloud
+## To model deployment
 
-Auth y base config (fill "your-project-name"): 
+Auth y base config in google cloud (fill "your-project-name"): 
 ```bash
 gcloud auth login
 gcloud projects [your-project-name] --set-as-default
@@ -49,7 +95,6 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 ```
 
 Enable APIs
-
 ```bash
 # Secret manager
 gcloud services enable secretmanager.googleapis.com
@@ -96,85 +141,20 @@ Create bucket
 gsutil mb -l us-central1 gs://$(echo $PROJECT_ID)/
 ```
 
-Create file structure
-
-mlb-clutch-collision
- |--frontend
- |--services
-     |--automl
-     |--bigquery
-     |--dataflow
-     |--functions
- |--config.json
-
-
-Ingestion
-
-Get Top players
-
-Execute Functions
-- Copy file from config.json to services/functions/config.json
-- Copy file from services/utils/secrets.py to services/functions/secrets.py
-- Modify services/utils/secrets.py to reference the current directory
-- Add authorization to google cloud functions service account
+Download repo and explore file structure
 ```bash
-gcloud secrets add-iam-policy-binding BUCKET \
-  --member="serviceAccount:$PROJECT_ID@appspot.gserviceaccount.com" \
-  --role="roles/secretmanager.admin"
+git clone [repo-url]
 ```
-- Deploy with the command in services/functions/command.sh
+1. backend: Connection to Google resources
+2. frontend: Webapp for user
+3. notebooks: All the procceses before using Google Cloud services.
+4. services: Scripts for cloud functions, dataflow, bigquery, vertexai
 
-Create a dataset for prediction
-
-Execute pipelines
-- Copy file from config.json to services/functions/config.json
-- Add authorization to dataflow topics
-```bash
-gcloud secrets add-iam-policy-binding BUCKET \
-  --member="serviceAccount:$PROJECT_ID@appspot.gserviceaccount.com" \
-  --role="roles/storage.admin"
-gcloud secrets add-iam-policy-binding BUCKET \
-  --member="serviceAccount:$PROJECT_ID@appspot.gserviceaccount.com" \
-  --role="roles/dataflow.admin"
-gcloud secrets add-iam-policy-binding BUCKET \
-  --member="serviceAccount:$PROJECT_ID@appspot.gserviceaccount.com" \
-  --role="roles/editor"
-```
-- Execute each of the commands in commands.sh
-
-Transfer data to BigQuery
-
-- Create a BD and table in BigQuery
-- Load CSV into BigQuery.
-```bash
-gcloud alpha bq datasets create [DATASET_ID] --project=$PROJECT_ID
-bq load --source_format=CSV --autodetect --skip_leading_rows=1 $PROJECT_ID:[DATASET_ID].[TABLE_ID] [gs-URI]
-```
-- Follow the model of the command in services/bigquery/command.sh
-
-Training
-
-
-
-Virtual Machine (Backend)
-
-Create a virtual machine in Google Cloud
-Zone: us-central1-c. Machine Type
-
-Configure Static IP
-Enter to (nic0) from External IP > IP addreses > Promote to static in external. Copy IP
-
-Configure Firewall
-Side panel Cloud NGFW > Firewall politics
-Create a new rule (Inbound) with origin 0.0.0.0/0, protocol TCP: 80,443
-
-Inside SSH
-Install python3.11-venv python-is-python3
-Clone repository [backend]
-Create virtual environment and install dependencies
-Copy service account credentials and add to GOOGLE_APPLICATION_CREDENTIALS
-
-e.g. 34.71.143.77
-
-Frontend (Google Cloud Run)
-gcloud run deploy mlb-frontend
+## Folders
+- Services - is the folder for the ingestion:
+You will find many scripts and steps
+- Notebooks - up to you, to execute from 1 to 7:
+In order to reproduce all the steps in the data.
+NOTICE: The purpose of this folder was not to make a perfect model but at least a proof-of-concept, the model can be improved a lot.
+- Backend: It has a batch prediction from model in data. And scripts to use Google TTS and Gemini through APIS. It was deployed on Google Compute Engine.
+- Frontend: With React and Javascript, it has the 2 main pages - Home and Match, it uses the APIs to enhance the experience to the final user. Deployed in Google Cloun Run
