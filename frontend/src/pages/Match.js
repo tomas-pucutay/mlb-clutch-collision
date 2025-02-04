@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { playersDictBatter, playersDictPitcher } from '../data/playersData';
 
 const MatchContainer = styled.div`
   display: flex;
@@ -128,52 +129,6 @@ const PlayerSelection = styled.select`
     background-color: #f2f2f2;
   }
 `;
-
-const playersDictBatter = {
-    'Best 2024': {
-      'Shohei Ohtani': {
-        id: '660271',
-        seasons: ['2024', '2023'],
-      },
-      'Mike Trout': {
-        id: '545361',
-        seasons: ['2024', '2023'],
-      },
-    },
-    'Best all time': {
-      'Babe Ruth': {
-        id: '12345',
-        seasons: ['1927', '1930'],
-      },
-      'Ty Cobb': {
-        id: '67890',
-        seasons: ['1910', '1915'],
-      },
-    },
-  };
-  
-  const playersDictPitcher = {
-    'Best 2024': {
-      'Max Scherzer': {
-        id: '453118',
-        seasons: ['2024', '2023'],
-      },
-      'Gerrit Cole': {
-        id: '453221',
-        seasons: ['2024', '2023'],
-      },
-    },
-    'Best all time': {
-      'Walter Johnson': {
-        id: '453089',
-        seasons: ['1910', '1915'],
-      },
-      'Cy Young': {
-        id: '453003',
-        seasons: ['1901', '1905'],
-      },
-    },
-  };
 
   const AccordionButton = styled.button`
   background-color: #1f2937;

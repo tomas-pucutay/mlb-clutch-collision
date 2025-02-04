@@ -320,3 +320,4 @@ services/functions/config.json
 services/dataflow/config.json
 services/automl/config.json
 web.md
+notebooks/*.csv
